@@ -1,0 +1,10 @@
+.gradle
+.idea
+build
+gradle
+*.iml
+gradle.properties
+version.properties
+classes
+gradlew
+out
