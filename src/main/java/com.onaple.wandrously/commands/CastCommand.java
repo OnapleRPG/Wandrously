@@ -1,7 +1,5 @@
 package com.onaple.wandrously.commands;
 
-import com.onaple.wandrously.Wandrously;
-import com.onaple.wandrously.actions.FireBallAction;
 import com.onaple.wandrously.actions.SpellAction;
 import com.onaple.wandrously.exceptions.MissingSpellParameterException;
 import com.onaple.wandrously.exceptions.SpellNotFoundException;
@@ -32,7 +30,7 @@ public class CastCommand implements CommandExecutor {
 
         try {
             SpellAction spellAction = SpellAction.getMatchingSpellAction(spellNameOptional.get());
-            spellAction.setPlayer(player);
+            spellAction.setLiving(player);
             spellAction.setWorld(player.getWorld());
             spellAction.cast();
         } catch (SpellNotFoundException | MissingSpellParameterException e) {

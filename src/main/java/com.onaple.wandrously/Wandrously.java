@@ -1,26 +1,28 @@
 package com.onaple.wandrously;
 
-import com.onaple.wandrously.actions.KnockBallAction;
 import com.onaple.wandrously.commands.CastCommand;
-import com.onaple.wandrously.data.dao.KnockBallDao;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.entity.projectile.Snowball;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 
 import javax.inject.Inject;
-import java.util.Optional;
 
 @Plugin(id = "wandrously", name = "Wandrously", version = "0.1.0")
 public class Wandrously {
     private static final String WANDROUSLY_PERMISSION = "wandrously.command";
     private static final String CAST_PERMISSION = "wandrously.command.cast";
+
+
+    private static Wandrously instance;
+    public static Wandrously getInstance() {
+        return instance;
+    }
+
     private static Logger logger;
     @Inject
     private void setLogger(Logger logger) {
@@ -32,7 +34,7 @@ public class Wandrously {
 
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
-        KnockBallDao.createTableIfNotExist();
+        Wandrously.instance = this;
 
         CommandSpec castCommand = CommandSpec.builder()
                 .description(Text.of("Cast a spell"))
@@ -51,10 +53,4 @@ public class Wandrously {
 
 		getLogger().info("WANDROUSLY initialized.");
 	}
-
-	@Listener
-    public void onEntityCollide(CollideEntityEvent event) {
-        Optional<Snowball> snowballOptional = event.getCause().first(Snowball.class);
-        snowballOptional.ifPresent(snowball -> KnockBallAction.applyEffect(snowball, event));
-    }
 }
